@@ -1,0 +1,74 @@
+
+
+
+
+import React, { Component } from 'react'
+
+export default class ProductApp extends Component {
+  render() {
+    return (
+      <div>
+        <Order/>
+        <Address/>
+        <Summary/>
+      </div>
+    )
+  }
+}
+
+  class Order extends Component {
+    render() {
+      return (
+        <div style={{border:'3px solid red'}}>
+           <h2>Order Information...!</h2>
+           <p>
+            <label>Product Name:
+                <select>
+                    <option>Product-1</option>
+                    <option>Product-2</option>
+                    <option>Product-3</option>
+                </select>
+            </label>
+           </p>
+           <p>
+            <label>Enter Quantity: <input type="text" /></label>
+           </p>
+        </div>
+      )
+    }
+  }
+  class Address extends Component {
+    render() {
+      return (
+        <div style={{border:'3px solid red'}}>
+           <h2>Address Information...!</h2>
+          
+           <p>
+            <label>Enter Address: <input type="text" /></label>
+           </p>
+        </div>
+      )
+    }
+  }
+  
+  class Summary extends Component {
+    render() {
+      return (
+        <div style={{border:'3px solid red'}}>
+           <h2>Order Summary...!</h2>
+           <p>
+            <label>Product Name:Product-1
+                
+            </label>
+           </p>
+           <p>
+            <label>Update Quantity: <input type="text" /></label>
+            <br/>
+            <label>Address: </label>
+           </p>
+        </div>
+      )
+    }
+  }
+  
+  
