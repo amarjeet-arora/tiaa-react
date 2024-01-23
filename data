@@ -4,19 +4,67 @@
 
 import React, { Component } from 'react'
 
+
+class UserError extends Component{
+  state={
+    hasError:null
+  }
+  static getDerivedStateFromError(error){
+    return {hasError: true}
+  }
+  componentDidCatch(error,errorInfo){
+    console.log(error);
+    console.log(errorInfo);
+  }
+  render(){
+    if(this.state.hasError){
+      return (
+        <div>
+          <p>We are having problem loading address...!</p>
+        </div>
+      )
+    }
+    else{
+      return this.props.children
+    }
+  }
+}
+
+
 export default class ProductApp extends Component {
+
+    state={
+        quantity:10,
+        address:''
+    }
+    orderChanged=(value)=>{
+          this.setState({
+            quantity:value
+          })
+    }
+    addressChanged=(value)=>{
+        this.setState({
+          address:value
+        })
+  }
+
   render() {
+   
     return (
       <div>
-        <Order/>
+        <Order qty={this.state.quantity} oc={this.orderChanged}/>
         <Address/>
-        <Summary/>
+        <Summary qty={this.state.quantity} oc={this.orderChanged}/>
       </div>
     )
   }
 }
 
   class Order extends Component {
+
+    changerOrder=(e)=>{
+        this.props.oc(e.target.value)
+    }
     render() {
       return (
         <div style={{border:'3px solid red'}}>
@@ -31,7 +79,7 @@ export default class ProductApp extends Component {
             </label>
            </p>
            <p>
-            <label>Enter Quantity: <input type="text" /></label>
+            <label>Enter Quantity: <input type="text" value={this.props.qty} onChange={this.changerOrder}/></label>
            </p>
         </div>
       )
@@ -46,12 +94,34 @@ export default class ProductApp extends Component {
            <p>
             <label>Enter Address: <input type="text" /></label>
            </p>
+           <UserError>
+           <PrimaryAddress/>
+           </UserError>
+          
+        </div>
+      )
+    }
+  }
+
+  class PrimaryAddress extends Component {
+    render() {
+      throw new Error("Not able to load the address")
+      return (
+        <div>
+          Existing Address
+           <h2>Pune , MH</h2>
+           Baner buliding....!
+           
         </div>
       )
     }
   }
   
+  
   class Summary extends Component {
+    changerOrder=(e)=>{
+        this.props.oc(e.target.value)
+    }
     render() {
       return (
         <div style={{border:'3px solid red'}}>
@@ -62,7 +132,7 @@ export default class ProductApp extends Component {
             </label>
            </p>
            <p>
-            <label>Update Quantity: <input type="text" /></label>
+            <label>Update Quantity: <input type="text" value={this.props.qty} onChange={this.changerOrder}/></label>
             <br/>
             <label>Address: </label>
            </p>
