@@ -1,144 +1,81 @@
+import React from 'react';
+import { SignUp } from './SignUp';
 
-
-
-
-import React, { Component } from 'react'
-
-
-class UserError extends Component{
-  state={
-    hasError:null
-  }
-  static getDerivedStateFromError(error){
-    return {hasError: true}
-  }
-  componentDidCatch(error,errorInfo){
-    console.log(error);
-    console.log(errorInfo);
-  }
-  render(){
-    if(this.state.hasError){
-      return (
-        <div>
-          <p>We are having problem loading address...!</p>
-        </div>
-      )
-    }
-    else{
-      return this.props.children
-    }
-  }
-}
-
-
-export default class ProductApp extends Component {
-
-    state={
-        quantity:10,
-        address:''
-    }
-    orderChanged=(value)=>{
-          this.setState({
-            quantity:value
-          })
-    }
-    addressChanged=(value)=>{
-        this.setState({
-          address:value
-        })
-  }
-
-  render() {
-   
+function Register(props) {
     return (
-      <div>
-        <Order qty={this.state.quantity} oc={this.orderChanged}/>
-        <Address/>
-        <Summary qty={this.state.quantity} oc={this.orderChanged}/>
-      </div>
-    )
-  }
+        <div className='container mt-3'>
+             <div className='row'>
+             <div className='col-md-5'>
+          <SignUp/>
+           </div>
+           
+           </div>
+        </div>
+    );
 }
 
-  class Order extends Component {
+export default Register;
 
-    changerOrder=(e)=>{
-        this.props.oc(e.target.value)
-    }
-    render() {
-      return (
-        <div style={{border:'3px solid red'}}>
-           <h2>Order Information...!</h2>
-           <p>
-            <label>Product Name:
-                <select>
-                    <option>Product-1</option>
-                    <option>Product-2</option>
-                    <option>Product-3</option>
-                </select>
-            </label>
-           </p>
-           <p>
-            <label>Enter Quantity: <input type="text" value={this.props.qty} onChange={this.changerOrder}/></label>
-           </p>
-        </div>
-      )
-    }
-  }
-  class Address extends Component {
-    render() {
-      return (
-        <div style={{border:'3px solid red'}}>
-           <h2>Address Information...!</h2>
-          
-           <p>
-            <label>Enter Address: <input type="text" /></label>
-           </p>
-           <UserError>
-           <PrimaryAddress/>
-           </UserError>
-          
-        </div>
-      )
-    }
-  }
 
-  class PrimaryAddress extends Component {
-    render() {
-      throw new Error("Not able to load the address")
-      return (
+
+
+
+import { Form, Formik } from 'formik'
+import TextField from './TextField'
+import * as Yup from 'yup'
+export const SignUp=()=>{
+
+    const validate=Yup.object({
+        firstName: Yup.string()
+        .max(15, 'Must be 15 char long').required('its required'),
+
+    })
+
+    return(
+        <Formik
+        initialValues={{
+            firstName:'',
+            lastName:'',
+            email:'',
+            password:'',
+            confirmPassword:''
+        }}
+        validationSchema={validate}
+        >
+        {formik => (
         <div>
-          Existing Address
-           <h2>Pune , MH</h2>
-           Baner buliding....!
-           
+            <h1> User Registration Page</h1>
+            {console.log(formik)}
+            <Form>
+       <TextField label="First Name" name="firstName" type="text"/>
+       <TextField label="Last Name" name="lastName" type="text"/>
+       <TextField label="email" name="email" type="email"/>
+       <TextField label="password" name="password" type="password"/>
+       <TextField label="confirm password" name="cpassword" type="password"/>
+       <button className='btn btn-success'>Submit</button>
+            </Form>
         </div>
-      )
-    }
-  }
-  
-  
-  class Summary extends Component {
-    changerOrder=(e)=>{
-        this.props.oc(e.target.value)
-    }
-    render() {
-      return (
-        <div style={{border:'3px solid red'}}>
-           <h2>Order Summary...!</h2>
-           <p>
-            <label>Product Name:Product-1
-                
-            </label>
-           </p>
-           <p>
-            <label>Update Quantity: <input type="text" value={this.props.qty} onChange={this.changerOrder}/></label>
-            <br/>
-            <label>Address: </label>
-           </p>
+    )}
+    </Formik>
+    )
+}
+
+
+
+
+import { ErrorMessage, useField } from 'formik';
+import React from 'react';
+
+function TextField({label,...props}) {
+    const [field,meta]=useField(props)
+    console.log(field,meta);
+    return (
+        <div className='mb-2'>
+            <label htmlFor={field.name}>{label}</label>
+            <input {...field} {...props}/>
+            <ErrorMessage name={field.name}/>
         </div>
-      )
-    }
-  }
-  
-  
+    );
+}
+
+export default TextField;
